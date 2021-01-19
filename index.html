@@ -1,0 +1,123 @@
+<DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="global.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Калькулятор</title>
+		<script>
+			var elements = {};
+			var toastTimer = null;
+			
+			Preload();
+			
+			function Preload(){
+				var _vh = window.innerHeight / 100;
+				document.documentElement.style.setProperty('--vh', `${_vh}px`);
+			}
+			
+			function Start(){
+				elements.textField = document.getElementById("textField");
+				elements.toast = document.getElementById("toast");
+				elements.toastText = document.getElementById("toastText");
+			}
+			
+			function Add(_v, _isSpecial){
+				if(elements.textField.innerHTML == "0" && !_isSpecial){
+					elements.textField.innerHTML = "";
+				}
+				elements.textField.innerHTML += _v;
+				elements.textField.scrollLeft += 100;
+			}
+			
+			function Back(){
+				if(elements.textField.innerHTML.length > 1){
+					elements.textField.innerHTML = elements.textField.innerHTML.substring(0, elements.textField.innerHTML.length - 1);
+				}
+				else{
+					elements.textField.innerHTML = "0";
+				}
+			}
+			
+			function Clear(){
+				elements.textField.innerHTML = "0";
+				elements.textField.scrollLeft = 0;
+			}
+			
+			function Result(){
+				try{
+					elements.textField.innerHTML = eval(elements.textField.innerHTML);
+				}
+				catch(_e){
+					ShowToast("<span style='color: #993333'>Error</span>", 1000);
+				}
+			}
+			
+			function ShowToast(_text, _time){
+				if(toastTimer != null){
+					clearTimeout(toastTimer);
+				}
+				elements.toastText.innerHTML = _text;
+				elements.toast.classList.remove("toast");
+				elements.toast.classList.add("toastShow");
+				toastTimer = setTimeout(function(){
+					elements.toast.classList.remove("toastShow");
+					elements.toast.classList.add("toast");
+				}, _time);
+			}
+		</script>
+	</head>
+	<body onload="Start()">
+		<div class="body-div">
+			<h1 class="text-field" id="textField">0</h1>
+			<div class="container">
+				<div class="container-offset"></div>
+				<div class="hc" align="center">
+					<h1 class="button-default" onclick="Add('7', false)">7</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-default" onclick="Add('8', false)">8</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-default" onclick="Add('9', false)">9</h1>
+				</div>
+				<div class="hc" align="center">
+					<h1 class="button-default" onclick="Add('4', false)">4</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-default" onclick="Add('5', false)">5</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-default" onclick="Add('6', false)">6</h1>
+				</div>
+				<div class="hc" align="center">
+					<h1 class="button-default" onclick="Add('1', false)">1</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-default" onclick="Add('2', false)">2</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-default" onclick="Add('3', false)">3</h1>
+				</div>
+				<div class="hc" align="center">
+					<h1 class="button-default" style="opacity: 0"></h1>
+					<div class="button-divider"></div>
+					<h1 class="button-clear" onclick="Clear()">C</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-default" onclick="Add('0', false)">0</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-clear" onclick="Back()"><-</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-calc" onclick="Result()">Calc</h1>
+				</div>
+				<div class="hc" align="center">
+					<h1 class="button-special" onclick="Add('+', true)">+</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-special" onclick="Add('-', true)">-</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-special" onclick="Add('*', true)">*</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-special" onclick="Add('/', true)">/</h1>
+					<div class="button-divider"></div>
+					<h1 class="button-special" onclick="Add('%', true)">%</h1>
+				</div>
+			</div>
+		</div>
+		<div id="toast" class="toast" align="center">
+			<h1 id="toastText"></h1>
+		</div>
+	</body>
+</html>
