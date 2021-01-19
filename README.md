@@ -1,1 +1,0 @@
-# simpcalc.github.io
